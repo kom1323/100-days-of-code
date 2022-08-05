@@ -38,7 +38,7 @@ print(options[player_input])
 #print computer choice
 print(f"Computer chose:\n{options[pc_input]}")
 
-if(player_input > pc_input):
+if(player_input == pc_input + 1 or (player_input == 0 and pc_input == 2)):
     print("You win")
 elif(player_input == pc_input):
     print("Tie")
