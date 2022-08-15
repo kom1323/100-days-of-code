@@ -13,11 +13,7 @@ class Snake:
         self.snake_body = []
         self.create_snake()
         self.head = self.snake_body[0]
-        t = Turtle()
-        t.color("blue")
-        t.goto(-300,0)
-        t.goto(300, 0)
-
+       
 
         
 
