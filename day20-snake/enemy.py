@@ -17,8 +17,7 @@ class Enemy(Turtle):
         self.shape("turtle")
         self.color("orange")
         self.penup()
-        self.goto(ENEMY_START)
-
+        self.reset()
 
     def move(self, snake: Snake) -> None:
         self.setheading(self.towards(snake.head))
@@ -26,3 +25,6 @@ class Enemy(Turtle):
 
 
 
+    def reset(self) -> None:
+        self.goto(ENEMY_START)
+        

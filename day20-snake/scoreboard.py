@@ -1,7 +1,7 @@
 from turtle import Turtle
 
 ALIGHMENT = "center"
-FONT = ('Courier', 20, 'normal')
+FONT = ('Courier', 16, 'normal')
 
 
 class ScoreBoard(Turtle):
@@ -9,6 +9,8 @@ class ScoreBoard(Turtle):
     def __init__(self) -> None:
         super().__init__()
         self.score = 0
+        with open(r"C:\Users\Omer\OneDrive\Desktop\All Projects\python projects\100-days-of-code\day20-snake\data.txt") as file:
+            self.high_score = int(file.read())
         self.color("white")
         self.penup()
         self.hideturtle()
@@ -16,16 +18,19 @@ class ScoreBoard(Turtle):
         self.update_scoreboard()
 
     def update_scoreboard(self) -> None:
-        self.write(f"Score: {self.score}", align=ALIGHMENT, font=FONT)
+        self.clear()
+        self.write(f"Score: {self.score} High Score: {self.high_score}", align=ALIGHMENT, font=FONT)
 
 
-    def game_over(self) -> None:
-        self.goto(0, 0)
-        self.write("GAME OVER", align=ALIGHMENT, font=FONT)
-
+    def reset(self) -> None:
+        if self.score > self.high_score:
+            self.high_score = self.score
+            with open(r"C:\Users\Omer\OneDrive\Desktop\All Projects\python projects\100-days-of-code\day20-snake\data.txt", mode="w") as file:
+                file.write(str(self.high_score))
+        self.score = 0
+        self.update_scoreboard()
 
     def increase_score(self) -> None:
-        self.clear()
         self.score += 1
         self.update_scoreboard()
 

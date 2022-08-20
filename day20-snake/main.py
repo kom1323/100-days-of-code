@@ -56,16 +56,17 @@ def start_game() -> None:
         #Detect collision with wall.
         if (snake.head.xcor() > GAME_BOUNDRY or snake.head.xcor() < -GAME_BOUNDRY 
             or snake.head.ycor() > GAME_BOUNDRY or snake.head.ycor() < -GAME_BOUNDRY):
-            game_is_on = False
-            score_board.game_over()
+            score_board.reset()
+            snake.reset()
+            enemy.reset()
 
 
         #Detect collision with tai and enemy.
         for segment in snake.snake_body[1:]:
             if snake.head.distance(segment) < 10 or enemy.distance(segment) < 20:
-                game_is_on = False
-                score_board.game_over()
-
+                score_board.reset()
+                snake.reset()
+                enemy.reset()
 
         
 
