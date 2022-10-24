@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 from random import choice, randint, shuffle
 import pyperclip
+import json
 
 
 
@@ -33,18 +34,51 @@ def pass_save():
     website = web_entry.get()
     username = username_entry.get()
     password = pass_entry.get()
+    new_data = {
+        website: {
+            "username": username,
+            "password": password
+        }
+
+    }
 
     if len(website) == 0 or len(username) == 0 or len(password) == 0:
         messagebox.showinfo(title="Oops", message="Please don't leave any fields empty!")
+    else:        
+        try:
+            with open(r".\day29-password_manager\data.json", mode="r") as f:
+                data = json.load(f)
+                data.update(new_data)
+        except FileNotFoundError:
+            data = new_data
+        finally:
+            with open(r".\day29-password_manager\data.json", mode="w") as f:
+                 json.dump(data, f, indent= 4)
+            web_entry.delete(0, "end")
+            pass_entry.delete(0, "end")
+
+
+            
+
+# ---------------------------- Search Function ------------------------------- #
+
+def find_password():
+
+    website = web_entry.get()
+
+    try:
+        with open(r".\day29-password_manager\data.json", mode="r") as f:
+                    data = json.load(f)
+    except:
+        messagebox.showerror(title="Error", message="No Data File Found")
     else:
-        is_ok = messagebox.askokcancel(title=website, message=f"These are the details entered: \nEmail: {username}\nPassword: {password}\nIs it ok to save?")
-
-        if is_ok:            
-            with open(r".\day29-password_manager\data.txt", mode="a") as f:
-                f.write(f"{website} | {username} | {password}\n")
-                web_entry.delete(0, "end")
-                pass_entry.delete(0, "end")
-
+        if website in data:
+            username = data[website]["username"]
+            password = data[website]["password"]
+        else:
+            messagebox.showerror(title="Error", message="No details for the website exists.")
+            
+        messagebox.showinfo(title=website, message=f"Username: {username}\nPassword: {password}")
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -74,11 +108,11 @@ pass_label.grid(column=0, row=3)
 #------------------entrys------------------#
 
 
-web_entry = Entry(width=35)
+web_entry = Entry(width=27)
 web_entry.grid(column=1, row=1, columnspan=2, sticky='w')
 web_entry.focus()
 
-username_entry = Entry(width=35)
+username_entry = Entry(width=27)
 username_entry.grid(column=1, row=2, columnspan=2, sticky='w')
 username_entry.insert(0, "omer2313@gmail.com")
 
@@ -87,6 +121,9 @@ pass_entry = Entry(width=24)
 pass_entry.grid(column=1, row=3, sticky='w')
 
 #------------------buttons------------------#
+
+search_button = Button(text="Search", command=find_password, width=12)
+search_button.grid(column=1, row=1, sticky='e', columnspan=2)
 
 gen_button = Button(text="Generate Password", command=generate_password)
 gen_button.grid(column=1, row=3, sticky='e', columnspan=2)
