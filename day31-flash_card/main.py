@@ -8,10 +8,33 @@ BACK_CARD_COLOR = "#90C0AD"
 BACKGROUND_COLOR = "#B1DDC6"
 LANGUAGE_FONT = ("Ariel", 40, "italic")
 WORD_FONT = ("Ariel", 60, "bold")
-data = pd.read_csv(r".\day31-flash_card\data\french_words.csv")
+data = None
+try:
+
+    data = pd.read_csv(r".\day31-flash_card\data\words_to_learn.csv")
+
+except:
+    data = pd.read_csv(r".\day31-flash_card\data\french_words.csv")
+    
+
+
+
 curr_word = 0
 
 # ---------------------------- Words changer ------------------------------- #
+
+
+def clicked_know():
+
+    global data
+    if language_label["text"] == "French":
+        data = data.drop(index = curr_word.iloc[0].name)
+        data.to_csv(r".\day31-flash_card\data\words_to_learn.csv", index=False)
+    next_word()
+
+def clicked_dont_know():
+    
+    next_word()
 
 def next_word():
 
@@ -68,11 +91,11 @@ next_word()
 # ---------------------------- buttons ------------------------------- #
 
 my_image_right = PhotoImage(file=r".\day31-flash_card\images\right.png")
-right_button = Button(image=my_image_right, highlightthickness=0, bd=0, height=100, width=100, command=next_word)
+right_button = Button(image=my_image_right, highlightthickness=0, bd=0, height=100, width=100, command=clicked_know)
 right_button.grid(column=1, row=1)
 
 my_image_wrong = PhotoImage(file=r".\day31-flash_card\images\wrong.png")
-wrong_button = Button(image=my_image_wrong, highlightthickness=0, bd=0, height=100, width=100, command=next_word)
+wrong_button = Button(image=my_image_wrong, highlightthickness=0, bd=0, height=100, width=100, command=clicked_dont_know)
 wrong_button.grid(column=0, row=1)
 
 
